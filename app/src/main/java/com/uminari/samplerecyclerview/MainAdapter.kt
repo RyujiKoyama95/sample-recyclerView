@@ -15,6 +15,7 @@ class MainAdapter(
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+        holder.title.text = list[position].title
         holder.textView.text = list[position].text
     }
 
@@ -23,6 +24,7 @@ class MainAdapter(
     }
 
     class MainViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val title: TextView = itemView.findViewById(R.id.list_item_title)
         val textView: TextView = itemView.findViewById(R.id.list_item_text_view)
     }
 }

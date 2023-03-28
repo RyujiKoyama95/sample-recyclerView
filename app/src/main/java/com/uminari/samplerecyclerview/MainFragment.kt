@@ -39,6 +39,7 @@ class MainFragment : Fragment() {
         for (i in 0..100) {
             val item = Item()
             item.text = "${i}行目"
+            item.title = "[${i}]title"
             list.add(item)
         }
         return list
