@@ -7,7 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(
-    private val list: List<Item>
+    private val list: List<Item>,
+    private val listener: onItemClickListener
 ): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
@@ -17,6 +18,7 @@ class MainAdapter(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         holder.title.text = list[position].title
         holder.textView.text = list[position].text
+        holder.itemView.setOnClickListener { listener.onItemClicked(holder, list[position]) }
     }
 
     override fun getItemCount(): Int {
@@ -27,4 +29,8 @@ class MainAdapter(
         val title: TextView = itemView.findViewById(R.id.list_item_title)
         val textView: TextView = itemView.findViewById(R.id.list_item_text_view)
     }
+}
+
+interface onItemClickListener {
+    fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item)
 }

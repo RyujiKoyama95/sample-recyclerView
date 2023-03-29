@@ -29,9 +29,17 @@ class MainFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = MainAdapter(
-                getList()
+                getList(),
+                listener
             )
         }
+    }
+
+    private val listener = object : onItemClickListener {
+        override fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item) {
+            holder.textView.text = "done click"
+        }
+
     }
 
     private fun getList(): List<Item> {
