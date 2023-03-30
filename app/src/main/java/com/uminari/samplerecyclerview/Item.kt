@@ -1,6 +1,6 @@
 package com.uminari.samplerecyclerview
 
 data class Item(
-    var title: String = "",
-    var text: String = ""
+    var text: String = "",
+    var isDoneStateChanged: Boolean = false
 )

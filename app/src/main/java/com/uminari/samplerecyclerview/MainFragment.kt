@@ -1,6 +1,7 @@
 package com.uminari.samplerecyclerview
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainFragment : Fragment() {
+    companion object {
+        private const val TAG = "MainFragment"
+    }
     private var recyclerView: RecyclerView? = null
 
     override fun onCreateView(
@@ -37,7 +41,8 @@ class MainFragment : Fragment() {
 
     private val listener = object : onItemClickListener {
         override fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item) {
-            holder.textView.text = "done click"
+            item.isDoneStateChanged = !item.isDoneStateChanged
+            Log.d(TAG, "onItemClicked status=${item.isDoneStateChanged}")
         }
 
     }
@@ -47,7 +52,6 @@ class MainFragment : Fragment() {
         for (i in 0..100) {
             val item = Item()
             item.text = "${i}行目"
-            item.title = "[${i}]title"
             list.add(item)
         }
         return list
