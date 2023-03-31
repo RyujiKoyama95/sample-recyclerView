@@ -18,7 +18,8 @@ class MainAdapter(
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         holder.textView.text = list[position].text
-        holder.checkBox.setOnClickListener { listener.onItemClicked(holder, list[position]) }
+        val item = list[position]
+        holder.checkBox.setOnClickListener { listener.onItemClicked(holder, item, position) }
     }
 
     override fun getItemCount(): Int {
@@ -32,5 +33,5 @@ class MainAdapter(
 }
 
 interface onItemClickListener {
-    fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item)
+    fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item, position: Int)
 }

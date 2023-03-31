@@ -15,6 +15,7 @@ class MainFragment : Fragment() {
         private const val TAG = "MainFragment"
     }
     private var recyclerView: RecyclerView? = null
+    private lateinit var list: MutableList<Item>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,28 +29,32 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.container_recycler_view)
+        list = getList()
         recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = MainAdapter(
-                getList(),
+                list,
                 listener
             )
         }
     }
 
     private val listener = object : onItemClickListener {
-        override fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item) {
+        override fun onItemClicked(holder: MainAdapter.MainViewHolder, item: Item, position: Int) {
             item.isDoneStateChanged = !item.isDoneStateChanged
-            Log.d(TAG, "onItemClicked status=${item.isDoneStateChanged}")
+            if (item.isDoneStateChanged) {
+                list.removeAt(position)
+                Log.d(TAG, "list=$list")
+            }
         }
 
     }
 
-    private fun getList(): List<Item> {
-        val list = mutableListOf<Item>()
-        for (i in 0..100) {
+    private fun getList(): MutableList<Item> {
+        list = mutableListOf()
+        for (i in 0..10) {
             val item = Item()
             item.text = "${i}行目"
             list.add(item)
