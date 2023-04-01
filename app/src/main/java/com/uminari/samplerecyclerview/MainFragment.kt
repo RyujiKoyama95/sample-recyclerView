@@ -27,7 +27,7 @@ class MainFragment : Fragment() {
                 items,
                 object : OnItemClickListener {
                     override fun onItemClicked(holder: MainViewHolder) {
-                        holder.title.text = "done"
+                        holder.title.text = "clicked"
                     }
                 }
             )
