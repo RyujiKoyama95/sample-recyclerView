@@ -23,14 +23,7 @@ class MainFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.container_recycler_view)
         val items = getItems()
         recyclerView.apply {
-            adapter = ItemAdapter(
-                items,
-                object : OnItemClickListener {
-                    override fun onItemClicked(holder: MainViewHolder) {
-                        holder.title.text = "done"
-                    }
-                }
-            )
+            adapter = ItemAdapter(items)
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }

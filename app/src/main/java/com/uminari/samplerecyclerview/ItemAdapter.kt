@@ -1,24 +1,21 @@
 package com.uminari.samplerecyclerview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.uminari.samplerecyclerview.databinding.ListItemBinding
 
 class ItemAdapter(
-    private val items: ArrayList <Item>,
-    private val listener: OnItemClickListener
+    private val items: ArrayList <Item>
     ): Adapter<MainViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-        return MainViewHolder(itemView)
+        val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MainViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.title.text = items[position].title
-        holder.title.setOnClickListener { listener.onItemClicked(holder) }
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int {
@@ -26,12 +23,8 @@ class ItemAdapter(
     }
 }
 
-class MainViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
-    var title = itemView.findViewById<TextView>(R.id.list_item_title)!!
-//    ↓のtitleを参照しようとするexpecting member declarationでエラー　謎
-//    title
-}
-
-interface OnItemClickListener {
-    fun onItemClicked(holder: MainViewHolder)
+class MainViewHolder(private val binding: ListItemBinding): RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: Item) {
+        binding.item = item
+    }
 }
