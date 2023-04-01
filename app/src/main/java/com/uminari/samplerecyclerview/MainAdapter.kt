@@ -6,29 +6,40 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.uminari.samplerecyclerview.databinding.ListItemBinding
 
 class MainAdapter(
     private val list: List<Item>,
     private val listener: onItemClickListener
 ): RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+    private lateinit var binding: ListItemBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-        return MainViewHolder(itemView)
+        binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        return MainViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.textView.text = list[position].text
+//        holder.textView.text = list[position].text
+//        val item = list[position]
+//        holder.checkBox.setOnClickListener { listener.onItemClicked(holder, item, position) }
+
+        // viewにItemをbindする
         val item = list[position]
-        holder.checkBox.setOnClickListener { listener.onItemClicked(holder, item, position) }
+        holder.bindObjectToView(item)
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    class MainViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.list_item_text_view)
-        val checkBox: CheckBox = itemView.findViewById(R.id.list_item_checkBox)
+    class MainViewHolder(private val binding: ListItemBinding): RecyclerView.ViewHolder(binding.root) {
+//        val textView: TextView = itemView.findViewById(R.id.list_item_text_view)
+//        val checkBox: CheckBox = itemView.findViewById(R.id.list_item_checkBox)
+        fun bindObjectToView(item: Item) {
+            binding.item = item
+        }
     }
 }
 
