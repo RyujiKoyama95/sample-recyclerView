@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainFragment : Fragment() {
     override fun onCreateView(
@@ -33,6 +34,13 @@ class MainFragment : Fragment() {
             )
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+        }
+
+        val button = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        button.setOnClickListener {
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.container_main_fragment, DialogFragment())
+            transaction.commit()
         }
     }
 
