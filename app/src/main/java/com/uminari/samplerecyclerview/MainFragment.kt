@@ -39,6 +39,7 @@ class MainFragment : Fragment() {
         val button = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
         button.setOnClickListener {
             val transaction = parentFragmentManager.beginTransaction()
+            transaction.addToBackStack(null)
             transaction.replace(R.id.container_main_fragment, DialogFragment())
             transaction.commit()
         }
