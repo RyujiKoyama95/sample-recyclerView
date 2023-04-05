@@ -1,15 +1,24 @@
 package com.uminari.samplerecyclerview
 
+import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
-class MainFragment : Fragment() {
+class MainFragment(application: Application) : Fragment() {
+    private lateinit var itemRepository: ItemRepository
+    init {
+        val db = ItemDatabase.getInstance(application)
+        val itemDao = db.itemDao()
+        itemRepository = ItemRepository(itemDao)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,12 +54,14 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun getItems(): ArrayList<Item> {
-        var items = arrayListOf<Item>()
-        for (i in 0..10) {
-            val item = Item()
-            item.title = "${i}行目"
-            items.add(item)
+    private fun getItems(): List<Item> {
+        var items = listOf<Item>()
+        viewLifecycleOwner.lifecycleScope.launch {
+            for (i in 0..10) {
+                val item = Item(i, "title_${i}")
+                itemRepository.addItem(item)
+            }
+            items = itemRepository.getAllItems()
         }
         return items
     }
