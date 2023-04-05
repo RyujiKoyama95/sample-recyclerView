@@ -54,6 +54,7 @@ class MainFragment(application: Application) : Fragment() {
         }
     }
 
+    // get dummy items
     private fun getItems(): List<Item> {
         var items = listOf<Item>()
         viewLifecycleOwner.lifecycleScope.launch {
