@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
-            replace(R.id.container_main_fragment, MainFragment())
+            replace(R.id.container_main_fragment, MainFragment(application))
             commit()
         }
     }

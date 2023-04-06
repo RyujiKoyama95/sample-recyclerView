@@ -1,5 +1,6 @@
 package com.uminari.samplerecyclerview
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
 class ItemAdapter(
-    private val items: ArrayList <Item>,
+    private val items: List<Item>,
     private val listener: OnItemClickListener
     ): Adapter<MainViewHolder>() {
+    companion object {
+        private const val TAG = "ItemAdapfter"
+    }
+    init {
+        Log.d(TAG, "onCreateViewHolder")
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
+        Log.d(TAG, "onCreateViewHolder")
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return MainViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+        Log.d(TAG, "onBindViewHolder items=$items")
         holder.title.text = items[position].title
         holder.title.setOnClickListener { listener.onItemClicked(holder) }
     }
