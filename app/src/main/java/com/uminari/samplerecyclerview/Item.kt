@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Item(
-    @PrimaryKey
-    val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var title: String
 )

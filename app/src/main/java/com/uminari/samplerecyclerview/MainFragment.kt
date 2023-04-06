@@ -2,6 +2,7 @@ package com.uminari.samplerecyclerview
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +12,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
+import java.util.concurrent.CountDownLatch
 
 class MainFragment(application: Application) : Fragment() {
-    private lateinit var itemRepository: ItemRepository
+    companion object {
+        private const val TAG = "MainFragment"
+    }
+    private var itemRepository: ItemRepository
+    private var items = listOf<Item>()
+
     init {
         val db = ItemDatabase.getInstance(application)
         val itemDao = db.itemDao()
         itemRepository = ItemRepository(itemDao)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,10 +39,10 @@ class MainFragment(application: Application) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.container_recycler_view)
-        val items = getItems()
+//        addItems()
         recyclerView.apply {
             adapter = ItemAdapter(
-                items,
+                getItems(),
                 object : OnItemClickListener {
                     override fun onItemClicked(holder: MainViewHolder) {
                         holder.title.text = "clicked"
@@ -43,6 +51,7 @@ class MainFragment(application: Application) : Fragment() {
             )
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+            Log.d(TAG, "onViewCreated")
         }
 
         val button = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
@@ -55,15 +64,32 @@ class MainFragment(application: Application) : Fragment() {
     }
 
     // get dummy items
-    private fun getItems(): List<Item> {
-        var items = listOf<Item>()
+    private fun addItems() {
         viewLifecycleOwner.lifecycleScope.launch {
             for (i in 0..10) {
-                val item = Item(i, "title_${i}")
+                val item = Item(title = "title_${i}")
                 itemRepository.addItem(item)
             }
-            items = itemRepository.getAllItems()
         }
+    }
+
+//    private fun getItems(): List<Item> {
+//        var items = listOf<Item>()
+//        for (i in 0..10) {
+//            val item = Item(title = "${i}行目")
+//            items += item
+//        }
+//        Log.d(TAG, "getItems items=$items")
+//        return items
+//    }
+
+    private fun getItems(): List<Item> {
+        lifecycleScope.launch {
+            items = itemRepository.getAllItems()
+            Log.d(TAG, "step1 getItems items=$items")
+        }
+        Thread.sleep(5000)
+        Log.d(TAG, "step2 getItems items=$items")
         return items
     }
 }

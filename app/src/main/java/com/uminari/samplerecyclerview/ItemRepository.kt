@@ -11,6 +11,6 @@ class ItemRepository(private val itemDao: ItemDao) {
         itemDao.deleteItem(item)
     }
     suspend fun getAllItems(): List<Item> {
-        itemDao.getAllItems()
+        return itemDao.getAllItems()
     }
 }
