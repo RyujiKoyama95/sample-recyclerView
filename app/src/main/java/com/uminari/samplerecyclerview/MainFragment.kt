@@ -20,6 +20,7 @@ class MainFragment(application: Application) : Fragment() {
     }
     private var itemRepository: ItemRepository
     private var items = listOf<Item>()
+    private val latch = CountDownLatch(1)
 
     init {
         val db = ItemDatabase.getInstance(application)
@@ -40,9 +41,12 @@ class MainFragment(application: Application) : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.container_recycler_view)
 //        addItems()
+        getItems()
+        Log.d(TAG, "onViewCreated step1")
+        latch.await()
         recyclerView.apply {
             adapter = ItemAdapter(
-                getItems(),
+                items,
                 object : OnItemClickListener {
                     override fun onItemClicked(holder: MainViewHolder) {
                         holder.title.text = "clicked"
@@ -83,13 +87,16 @@ class MainFragment(application: Application) : Fragment() {
 //        return items
 //    }
 
-    private fun getItems(): List<Item> {
+    private fun getItems() {
+        Log.d(TAG, "getItems step2")
+        var allItems = listOf<Item>()
         lifecycleScope.launch {
-            items = itemRepository.getAllItems()
-            Log.d(TAG, "step1 getItems items=$items")
+            allItems = itemRepository.getAllItems()
+            Log.d(TAG, "getItems step3")
         }
-        Thread.sleep(5000)
-        Log.d(TAG, "step2 getItems items=$items")
-        return items
+        if (allItems.isNotEmpty()) {
+            latch.countDown()
+            Log.d(TAG, "getItems step4")
+        }
     }
 }
